@@ -1,0 +1,61 @@
+#!/usr/bin/python
+# -*- coding: latin-1 -*-
+import os, sys
+import time
+import datetime
+import busio
+import digitalio
+import board
+import adafruit_mcp3xxx.mcp3008 as MCP
+from adafruit_mcp3xxx.analog_in import AnalogIn
+# create the spi bus
+spi = busio.SPI(clock=board.SCK, MISO=board.MISO, MOSI=board.MOSI)
+# create the cs (chip select)
+cs = digitalio.DigitalInOut(board.D5)
+# create the mcp object
+mcp = MCP.MCP3008(spi, cs)
+# create an analog input channel on pin (Pn)
+chan0 = AnalogIn(mcp, MCP.P0)
+chan1 = AnalogIn(mcp, MCP.P1)
+chan2 = AnalogIn(mcp, MCP.P2)
+#Wert des Identifikations Wiederstandes
+r1 = 460
+
+
+print('Reading MCP3008 values, press Ctrl-C to quit...')
+def filecreator():
+    file = open(datetime.datetime.now().strftime("%y""%m""%d"), "a")
+    file.write("Neue Messung:"+datetime.datetime.now().strftime("%X")+ "\n")
+    #file.write("\n")
+    print("1")
+
+
+def identifier():
+    ohm = r1*((chan2.voltage)/(3.3-(chan2.voltage)))
+    print(str(ohm))
+    #Identifier logic noch schreiben wen wiederstand so und so viel ohm = Metall
+
+
+def adcfilewriter():
+    print("2")
+    valuetotal0 = 0
+    countSoll = 20
+    countIst = 0
+    value0 = chan0.voltage
+    while countSoll != countIst:
+        valuetotal0 = value0+valuetotal0
+        time.sleep(0.1)
+        countIst +=1
+
+    total0 = valuetotal0/countSoll
+    total0 = "{:.5f}".format(total0)
+    file = open(datetime.datetime.now().strftime("%y""%m""%d"), "a")
+    file.write(total0 + "\n")
+    print(total0)
+
+
+filecreator()
+identifier()
+while True :
+    adcfilewriter()
+    #time.sleep(1)
