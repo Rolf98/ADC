@@ -27,10 +27,10 @@ fileNumber = 0
 print('Reading MCP3008 values, press Ctrl-C to quit...')
 def filecreator():
 
-    while (os.path.exists(datetime.datetime.now().strftime("%y""%m""%d")+"-"+str(fileNumber)) == True):
+    while (os.path.exists(datetime.datetime.now().strftime("%y""%m""%d")+"-"+str(fileNumber)+".txt") == True):
         fileNumber += 1
         print(fileNumber)
-    file = open(datetime.datetime.now().strftime("%y""%m""%d")+"-"+str(fileNumber), "a")
+    file = open(datetime.datetime.now().strftime("%y""%m""%d")+"-"+str(fileNumber+".txt"), "a")
     file.write("Neue Messung:"+datetime.datetime.now().strftime("%X")+ "\n")
     print("file created")
 
@@ -59,7 +59,7 @@ def adcfilewriter():
     total2 = valuetotal2/countSoll
     total2 = "{:.5f}".format(total2)
 
-    file = open(datetime.datetime.now().strftime("%y""%m""%d") + "-" + str(fileNumber), "a")
+    file = open(datetime.datetime.now().strftime("%y""%m""%d") + "-" + str(fileNumber)+".txt", "a")
     file.write("/t" + total1 + "/t" + total2 + "\n")
     print(total1)
 
